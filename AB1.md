@@ -51,6 +51,9 @@ library(testthat)
 In this exercise, I’ll make a function, fortify it, and document the
 function using roxygen2 tags.
 
+Notice that in the return statement, we used `as_tibble` to ensure the
+output type is consistent despite the type of input.
+
 ``` r
 #' Count of missing values
 #'
@@ -66,7 +69,7 @@ count_na <- function(data, col_name) {
   } else if (!(col_name %in% colnames(data))) {
     stop("'", col_name, "' does not exist in the data.")
   } else {
-    return(data %>% summarise(across(col_name, ~ sum(is.na(.x)))))
+    return(as_tibble(data %>% summarise(across(col_name, ~ sum(is.na(.x))))))
   }
 }
 ```
@@ -152,19 +155,48 @@ count_na(penguins, "month")
 ## Exercise 4: Test the Function
 
 The first three tests are testing if the function gives the expected
-output. The last two tests are testing whether the function throws the
+output. The last three tests are testing whether the function throws the
 expected errors. The output and errors are similar to the examples shown
 above.
 
 ``` r
-test_that("Test the function 'count_na'", {
-  expect_equal(count_na(penguins, "sex"), summarise(penguins, across(sex, ~ sum(is.na(.x)))))
-  expect_equal(count_na(penguins, "bill_length_mm"), summarise(penguins, across(bill_length_mm, ~ sum(is.na(.x)))))
-  expect_equal(count_na(penguins, "year"), summarise(penguins, across(year, ~ sum(is.na(.x)))))
+test_that("Test the function 'count_na' with data set 'penguins'", {
+  expect_equal(count_na(penguins, "sex"), as_tibble(summarise(penguins, across(sex, ~ sum(is.na(.x))))))
+  expect_equal(count_na(penguins, "bill_length_mm"), as_tibble(summarise(penguins, across(bill_length_mm, ~ sum(is.na(.x))))))
+  expect_equal(count_na(penguins, "year"), as_tibble(summarise(penguins, across(year, ~ sum(is.na(.x))))))
   expect_error(count_na(penguins, 22), "col_name should be a string.")
   expect_error(count_na(penguins, ""), "'' does not exist in the data.")
   expect_error(count_na(penguins, "month"), "'month' does not exist in the data.")
 })
 ```
 
-    ## Test passed 🎉
+    ## Test passed 🎊
+
+The following test cases test the function with the data set `mtcars`,
+which is a data frame. We can then use these test cases to see if the
+output is consistent.
+
+``` r
+head(mtcars)
+```
+
+    ##                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
+    ## Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+    ## Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+    ## Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+    ## Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+    ## Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+    ## Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+
+``` r
+test_that("Test the function 'count_na' with data set 'mtcars'", {
+  expect_equal(count_na(mtcars, "cyl"), as_tibble(summarise(mtcars, across(cyl, ~ sum(is.na(.x))))))
+  expect_equal(count_na(mtcars, "disp"), as_tibble(summarise(mtcars, across(disp, ~ sum(is.na(.x))))))
+  expect_equal(count_na(mtcars, "vs"), as_tibble(summarise(mtcars, across(vs, ~ sum(is.na(.x))))))
+  expect_error(count_na(mtcars, 22), "col_name should be a string.")
+  expect_error(count_na(mtcars, ""), "'' does not exist in the data.")
+  expect_error(count_na(mtcars, "month"), "'month' does not exist in the data.")
+})
+```
+
+    ## Test passed 😸
