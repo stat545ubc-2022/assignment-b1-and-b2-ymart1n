@@ -35,7 +35,7 @@ This is a basic example which shows you how to count missing values (NA) in colu
 
 ```{r example}
 library(countNA)
-## penguins is a data set from palmerpenguins that has columns "sex" and "year"
+## penguins is a data set from palmerpenguins that has columns "sex" and "year" 
 library(palmerpenguins)
 count_na(penguins, "sex")
 count_na(penguins, "year")
