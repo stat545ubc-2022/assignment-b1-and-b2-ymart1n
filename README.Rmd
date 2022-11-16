@@ -1,0 +1,42 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# countNA
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of countNA is to count missing values (NA) in the specified column `col_name` of the given data set `data`.
+
+## Installation
+
+You can install the development version of countNA from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("stat545ubc-2022/assignment-b1-and-b2-ymart1n")
+```
+
+## Example
+
+This is a basic example which shows you how to count missing values (NA) in columns `sex` and `year` of the data set `penguins`:
+
+```{r example}
+library(countNA)
+## penguins is a data set from palmerpenguins that has columns "sex" and "year"
+library(palmerpenguins)
+count_na(penguins, "sex")
+count_na(penguins, "year")
+```
