@@ -24,7 +24,7 @@ The goal of countNA is to count missing values (NA) in the specified column `col
 
 You can install the development version of countNA from [GitHub](https://github.com/) with:
 
-``` r
+```{r}
 # install.packages("devtools")
 devtools::install_github("stat545ubc-2022/assignment-b1-and-b2-ymart1n")
 ```
